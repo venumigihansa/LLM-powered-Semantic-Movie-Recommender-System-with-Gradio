@@ -1,78 +1,92 @@
-🎬 LLM Powered Movie Recommender System (IMDB Top 1000)
-This project builds a movie recommendation system that combines semantic similarity search, genre classification, and emotion classification using modern NLP frameworks like Hugging Face Transformers and LangChain with ChromaDB.
+# 🎬 LLM-Powered Movie Recommender System (IMDB Top 1000)
 
-The system takes the IMDB Top 1000 Movies Dataset from Kaggle, cleans and processes it, performs zero-shot genre classification and emotion detection, generates vector embeddings for semantic search, and allows users to retrieve movie recommendations based on natural language queries.
+This project is an **AI-powered movie recommendation system** that combines:
+- **Similarity search** using TF-IDF embeddings and Chroma vector database.
+- **Zero-shot genre classification** using a Hugging Face model.
+- **Emotion classification** using a fine-tuned model on the `dair-ai/emotion` dataset.
+- An **interactive Gradio dashboard** for movie search and filtering.
 
-🚀 Features
-✅ Dataset Preparation: Cleaned and preprocessed IMDB Top 1000 movies dataset from Kaggle.
+The system enables users to search for movies by description, retrieve similar movies, and filter them based on predicted emotions.
 
-✅ Zero-Shot Genre Classification: Used facebook/bart-large-mnli to classify movies into 18 genres:
-Action, Adventure, Animation, Comedy, Crime, Drama, Family, Fantasy, Horror, Mystery, Romance, Sci-Fi, Thriller, War, Western, Biography, Documentary, History
+---
 
-✅ Emotion Classification: Fine-tuned roberta-base on dair-ai/emotion to classify movies into 6 emotions:
-Sadness, Joy, Love, Anger, Fear, Surprise
+## 📂 Dataset
+We used the **[IMDB Top 1000 Movies Dataset](https://www.kaggle.com/datasets/PromptCloudHQ/imdb-data)** obtained from Kaggle.  
+The dataset was cleaned, and additional columns were added for predicted **emotions** and **genres**.
 
-✅ Similarity Search Engine: Built semantic search using TF-IDF embeddings stored in ChromaDB with LangChain integration.
+---
 
-✅ Emotion-Augmented Recommendations: Appended emotion labels and confidence scores to the movie dataset.
+## 🧠 Models
 
-✅ Final Consolidated Dataset: Created movies_final.csv with cleaned data, predicted genres, and emotion scores.
+### 1. Zero-Shot Genre Classification
+- **Model**: [facebook/bart-large-mnli](https://huggingface.co/facebook/bart-large-mnli)  
+- **Purpose**: Classify each movie into one or more of the following **18 genres** based on the movie overview:
 
-✅ Interactive Dashboard: Implemented a Gradio interface where users can:
+- **Technique**: Zero-shot text classification using Hugging Face's `transformers` library.
 
-Search movies based on natural language descriptions.
+---
 
-Filter results by emotion labels.
+### 2. Emotion Classification
+- **Dataset**: [dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion)
+- **Model**: [roberta-base](https://huggingface.co/roberta-base) fine-tuned on the dataset.
+- **Emotions**:  
 
-View confidence scores for predictions.
+- **Dataset split**:
+- Train: 16k samples
+- Validation: 2k samples
+- Test: 2k samples
+- **Accuracy**: ~50% (due to dataset imbalance).
 
-✅ Data Visualization: Plotted emotion distributions, genre counts, and overview statistics.
+This model predicts the **dominant emotion** of a movie based on its overview.
 
-🛠️ Tools & Libraries
-Core Libraries
-Transformers: Zero-shot classification and fine-tuning for emotion detection
+---
 
-LangChain: ChromaDB integration for semantic similarity search
+## 🏗️ Pipeline
 
-ChromaDB: Vector database for movie embeddings
+1. **Data Cleaning**  
+ - Loaded the Kaggle dataset using Pandas.
+ - Removed duplicates and null values.
+ - Standardized column names.
 
-Pandas: Data cleaning and manipulation
+2. **Genre Classification**  
+ - Used `facebook/bart-large-mnli` for zero-shot genre classification.
+ - Added predicted genres as a new column in the DataFrame.
 
-NumPy: Numerical processing for dataset transformations
+3. **Emotion Classification**  
+ - Fine-tuned `roberta-base` on `dair-ai/emotion`.
+ - Added predicted emotion and confidence scores as new columns.
 
-Gradio: Interactive web-based dashboard for movie search
+4. **Vector Database Creation**  
+ - Computed TF-IDF embeddings for movie overviews.
+ - Stored embeddings in **Chroma** for similarity search.
 
-📊 Emotion Model Training
-Dataset: dair-ai/emotion
+5. **Final Dataset**  
+ - Merged the predictions (emotions + genres) into the original dataset.
+ - Exported the final enriched dataset as `movies_final.csv`.
 
-Train/Val/Test Split: 16k / 2k / 2k
+6. **Gradio Dashboard**  
+ - Built an interactive dashboard using [Gradio](https://www.gradio.app/).
+ - Features:
+   - Search for similar movies using movie descriptions.
+   - Filter movies based on predicted emotions.
+   - Display results in a clean and interactive interface.
 
-Emotions: Sadness, Joy, Love, Anger, Fear, Surprise
+---
 
-Model: Fine-tuned roberta-base
+## 🛠️ Tech Stack
 
-Achieved Accuracy: ~50% (due to class imbalance in the dataset)
+| Component            | Technology |
+|----------------------|------------|
+| Programming Language | Python     |
+| Libraries            | Pandas, NumPy, Scikit-learn, Hugging Face Transformers, LangChain, ChromaDB, Gradio |
+| Dataset              | [IMDB Top 1000 Movies](https://www.kaggle.com/datasets/PromptCloudHQ/imdb-data) |
+| Models               | [facebook/bart-large-mnli](https://huggingface.co/facebook/bart-large-mnli), [roberta-base](https://huggingface.co/roberta-base) |
 
-🏗 Workflow
-Data Cleaning: Removed missing values and standardized dataset structure.
+---
 
-Emotion Classification: Fine-tuned RoBERTa and predicted emotions with confidence scores.
+## 🚀 How to Run
 
-Genre Classification: Applied zero-shot classification using BART-Large-MNLI.
-
-Vector Database Creation: Generated TF-IDF embeddings and stored them in ChromaDB.
-
-Data Consolidation: Created a single movies_final.csv containing cleaned data, genres, and emotions.
-
-Dashboard Development: Built a Gradio-based interface for semantic search and emotion filtering.
-
-🎨 Dashboard Demo
-The Gradio dashboard enables:
-
-🔍 Description-Based Search: Retrieve similar movies based on user input.
-
-🎭 Emotion Filtering: Filter movies by emotion predictions.
-
-📊 Metadata Display: View genres, emotions, and confidence scores.
-
-🎥 Demo Video: (Insert demo video link here)
+1. **Clone the repository**
+ ```bash
+ git clone https://github.com/your-username/movie-recommender.git
+ cd movie-recommender
