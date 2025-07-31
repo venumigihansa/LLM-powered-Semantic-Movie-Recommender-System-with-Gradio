@@ -1,4 +1,4 @@
-# 🎬 LLM-Powered Movie Recommender System (IMDB Top 1000)
+#  LLM-Powered Movie Recommender System 
 
 This project is an **AI-powered movie recommendation system** that combines:
 - **Similarity search** using TF-IDF embeddings and Chroma vector database.
